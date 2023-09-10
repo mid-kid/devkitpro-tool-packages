@@ -20,8 +20,8 @@ for x in */desc; do
 
     # Some packages are outdated in upstream...
     case "$repo_pkgname" in
-        gamecube-tools) repo_pkgver=1.0.6 ;;
-        gp32-tools) repo_pkgver=1.0.4 ;;
+        gamecube-tools) test "$repo_pkgver" = 1.0.3 && repo_pkgver=1.0.6 || true ;;
+        gp32-tools) test "$repo_pkgver" = 1.0.3 && repo_pkgver=1.0.4 || true ;;
     esac
 
     pkgbuild="../$repo_pkgname/PKGBUILD"
