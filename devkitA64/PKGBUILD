@@ -1,0 +1,48 @@
+pkgname=devkitA64
+pkgver=r23
+pkgrel=1
+arch=(any)
+_ver_binutils=2.32
+_ver_gcc=13.2.0
+_ver_newlib=4.3.0.20230120
+source=(https://github.com/devkitPro/buildscripts/archive/refs/tags/${pkgname}_$pkgver.tar.gz
+    https://ftp.gnu.org/gnu/binutils/binutils-$_ver_binutils.tar.xz
+    https://ftp.gnu.org/gnu/gcc/gcc-$_ver_gcc/gcc-$_ver_gcc.tar.xz
+    https://sourceware.org/pub/newlib/newlib-$_ver_newlib.tar.gz)
+noextract=( "${source[@]##*/}" )
+noextract=( "${noextract[@]:1}" )
+
+prepare() {
+    if [ -d "$DEVKITPRO/$pkgname" ]; then
+        error "$DEVKITPRO/$pkgname directory already exists!"
+        return 1
+    fi
+
+    mv "${noextract[@]}" $srcdir/buildscripts-${pkgname}_$pkgver
+    cd $srcdir/buildscripts-${pkgname}_$pkgver
+
+    # Fix building certain portlibs
+    sed -i -e '/^+static inline [^ ]\+ __libc/s/inline //' */patches/newlib-*.patch
+
+    cat > config.sh << 'EOF'
+BUILD_DKPRO_PACKAGE=3
+BUILD_DKPRO_INSTALLDIR="$DEVKITPRO"
+BUILD_DKPRO_AUTOMATED=1
+BUILD_DKPRO_SKIP_CRTLS=1
+EOF
+}
+
+build() {
+    cd $srcdir/buildscripts-${pkgname}_$pkgver
+    ./build-devkit.sh
+}
+
+package() {
+    mkdir -p "$pkgdir/$DEVKITPRO"
+    mv "$DEVKITPRO/$pkgname" "$pkgdir/$DEVKITPRO"
+}
+
+sha256sums=('93932ab04f3a8fbdd37047df039a9ee1c6752360cd393297f87ba133d94ac059'
+            '0ab6c55dd86a92ed561972ba15b9b70a8b9f75557f896446c82e8b36e473ee04'
+            'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da'
+            '83a62a99af59e38eb9b0c58ed092ee24d700fff43a22c03e433955113ef35150')

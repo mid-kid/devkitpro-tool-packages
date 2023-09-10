@@ -1,0 +1,22 @@
+pkgname=gba-tools
+pkgver=1.2.0
+pkgrel=1
+arch=(any)
+source=(https://github.com/devkitPro/gba-tools/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('516e5037e48b3dbaaa41291f83146d039b35b04ccc6887a7e92858ff59ea6daa')

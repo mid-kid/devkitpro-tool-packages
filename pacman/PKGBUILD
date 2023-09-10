@@ -1,0 +1,33 @@
+pkgname=pacman
+pkgver=6.0.2
+pkgrel=1
+arch=(any)
+source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz
+    rootless.patch)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    patch -p1 -i $srcdir/rootless.patch
+
+    CC=cc CXX=c++ \
+    meson setup build \
+        -Dprefix="$DEVKITPRO/pacman" \
+        -Dsysconfdir="$DEVKITPRO/pacman/etc" \
+        -Dlocalstatedir="$DEVKITPRO/pacman/var" \
+        -Dmakepkg-template-dir="$DEVKITPRO/pacman/share/makepkg-template" \
+        --default-library=static \
+        "$@"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver/build
+    ninja
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver/build
+    DESTDIR=$pkgdir ninja install
+}
+
+sha256sums=('7d8e3e8c5121aec0965df71f59bedf46052c6cf14f96365c4411ec3de0a4c1a5'
+            '90f459e0ccd1a821313d112773bf2c474714cd4055f2eee45df7e184f9a4431e')

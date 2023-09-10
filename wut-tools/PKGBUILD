@@ -1,0 +1,32 @@
+pkgname=wut-tools
+pkgver=1.3.4
+pkgrel=1
+arch=(any)
+source=(https://github.com/devkitPro/wut-tools/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz
+    http://downloads.sourceforge.net/freeimage/FreeImage3180.zip)
+
+prepare() {
+    ( cd FreeImage
+        CXXFLAGS="-std=c++14 -O3 -fPIC -fexceptions -fvisibility=hidden" make
+        rm Dist/*.so
+    )
+
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    LDFLAGS="-L$PWD/../FreeImage/Dist" \
+    CPPFLAGS="-I$PWD/../FreeImage/Dist" \
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('d2ff5860538998bd49138bc3883b163e50dcdab5a1af3eda8cc5e27f4092f502'
+            'f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd')

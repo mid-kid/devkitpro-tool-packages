@@ -1,0 +1,23 @@
+pkgname=picasso
+pkgver=2.7.1
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/picasso/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('af169dd4d80f74301445b16a035e6e111721e3c52553b59a2ba9bdb061992f77')

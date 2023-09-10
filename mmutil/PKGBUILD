@@ -1,0 +1,23 @@
+pkgname=mmutil
+pkgver=1.10.1
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/mmutil/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('3d1fd1596517c6ec46846a1ab04cf8f8f6027444381a56e973bec8cb3dead1c9')

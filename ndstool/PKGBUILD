@@ -1,0 +1,23 @@
+pkgname=ndstool
+pkgver=2.2.0
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/ndstool/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('bc8d843523d928db0067c4f86be842f279301d017d5b95788d2725731a8282ee')

@@ -1,0 +1,6 @@
+export DEVKITPRO="%DEVKITPRO%"
+export DEVKITARM="${DEVKITPRO}/devkitARM"
+export DEVKITPPC="${DEVKITPRO}/devkitPPC"
+
+export PATH="$PATH:${DEVKITPRO}/tools/bin"
+

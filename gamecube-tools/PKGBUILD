@@ -1,0 +1,36 @@
+pkgname=gamecube-tools
+pkgver=1.0.6
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/gamecube-tools/archive/refs/tags/v$pkgver.tar.gz
+    http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
+    gl.h)
+
+prepare() {
+    ( cd FreeImage
+        CXXFLAGS="-std=c++14 -O3 -fPIC -fexceptions -fvisibility=hidden" make
+        rm Dist/*.so
+    )
+
+    install -Dm655 $srcdir/gl.h gl/GL/gl.h
+
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    LDFLAGS="-L$PWD/../FreeImage/Dist" \
+    CPPFLAGS="-I$PWD/../FreeImage/Dist -I$PWD/../gl" \
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('0366e8b9b91025a0cf0aafd5c4b07a70ade54e3f04cf03ce93461f4a47b8ee9c'
+            'f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd'
+            'edc5d656da6bcedcfad29767ef63431f8ca3883c6b6212419840edb2a0850a12')

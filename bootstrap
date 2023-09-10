@@ -1,0 +1,4 @@
+#!/bin/sh
+
+( cd pacman; ./bootstrap --noconfirm )
+( cd devkit-env; ./bootstrap --noconfirm )

@@ -1,0 +1,23 @@
+pkgname=gp2x-tools
+pkgver=1.0.1
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/gp2x-tools/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('825ecd1326522ca6c81fcf59ccc2942ba8e31b0e098f10033c7e1e8567c54af4')

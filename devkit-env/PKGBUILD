@@ -1,0 +1,22 @@
+pkgname=devkit-env
+pkgver=1.0.1
+pkgrel=1
+arch=(any)
+source=(devkit-env.in dkp-pacman.in)
+sha256sums=(SKIP SKIP)
+
+package() {
+    sed -e 's|%DEVKITPRO%|'"$DEVKITPRO"'|g' $srcdir/devkit-env.in > devkit-env.sh
+    install -Dm755 devkit-env.sh "$pkgdir/$DEVKITPRO/devkit-env.sh"
+    for tool in \
+        makepkg \
+        pacman \
+        pacman-db-upgrade \
+        pacman-key \
+        repo-add \
+        repo-remove
+    do
+        sed -e 's/%TOOL%/'$tool'/g' $srcdir/dkp-pacman.in > dkp-$tool
+        install -Dm755 dkp-$tool "$pkgdir/$DEVKITPRO/tools/bin/dkp-$tool" 
+    done
+}

@@ -1,0 +1,23 @@
+pkgname=general-tools
+pkgver=1.4.4
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/general-tools/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('72b773850f90dcac113b706dd7923c519ebb6584e02e148319b5cba771e154aa')

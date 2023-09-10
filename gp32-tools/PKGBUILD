@@ -1,0 +1,25 @@
+pkgname=gp32-tools
+pkgver=1.0.4
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/gp32-tools/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    mkdir build && cd build
+    CXXFLAGS="-O2 -std=c++14" \
+    ../configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver/build
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver/build
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('be9028f908d9bc9c6459a36d31850bc071350c3a8cb50f28d7a0d9f9d48996de')

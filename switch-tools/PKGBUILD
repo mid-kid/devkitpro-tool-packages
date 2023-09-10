@@ -1,0 +1,30 @@
+pkgname=switch-tools
+pkgver=1.12.0
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/switchbrew/switch-tools/archive/refs/tags/v$pkgver.tar.gz
+    lz4-1.4.9.tar.gz::https://github.com/lz4/lz4/archive/refs/tags/v1.9.4.tar.gz)
+
+prepare() {
+    ( cd lz4-*/
+        make PREFIX="$PWD/../lz4" BUILD_SHARED=no install
+    )
+
+    cd $srcdir/$pkgname-$pkgver
+    ./autogen.sh
+    PKG_CONFIG_PATH="$PWD/../lz4/lib/pkgconfig:$PKG_CONFIG_PATH" \
+    ./configure --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+}
+
+sha256sums=('460b19fb3f597db584cefc3be0c08ebf61d26c3e342eea0b61da727e67ad60d6'
+            '0b0e3aa07c8c063ddf40b082bdf7e37a1562bda40a0ff5272957f3e987e0e54b')

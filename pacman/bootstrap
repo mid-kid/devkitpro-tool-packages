@@ -1,0 +1,47 @@
+#!/bin/bash
+set -e
+
+if [ -d "$DEVKITPRO/pacman" ]; then
+    export PATH="$DEVKITPRO/pacman/bin:$PATH"
+    exec makepkg -ci "$@"
+fi
+
+source PKGBUILD
+
+pacman_src="${source[0]##*/}"
+pacman_url="${source[0]}"
+pacman_sha="${sha256sums[0]}"
+check() {
+    test "$(sha256sum "$pacman_src" | cut -d' ' -f1)" == "$pacman_sha"
+}
+if [ -f "$pacman_src" ] && ! check; then
+    rm -f "$pacman_src"
+fi
+if [ ! -f "$pacman_src" ]; then
+    echo "Downloading $pacman_src..."
+    curl -LO "$pacman_url"
+fi
+if ! check; then
+    echo "Checksum mismatch" 2>&1
+    exit 1
+fi
+
+rm -rf boot
+mkdir -p boot
+cd boot
+tar xf "../${source[0]##*/}"
+cp "../${source[1]##*/}" .
+
+srcdir="$PWD"
+pkgdir=""
+prepare -Dprefix="$PWD/pacman" -Dsysconfdir="$PWD/pacman/etc"
+build
+package
+
+cd "$srcdir"
+cd ..
+
+export PATH="$PWD/boot/pacman/bin:$PATH"
+./boot/pacman/bin/makepkg -ci "$@"
+
+rm -rf boot

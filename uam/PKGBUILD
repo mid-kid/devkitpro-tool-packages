@@ -1,0 +1,23 @@
+pkgname=uam
+pkgver=1.1.0
+pkgrel=1
+arch=(any)
+source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/uam/archive/refs/tags/v$pkgver.tar.gz)
+
+prepare() {
+    cd $srcdir/$pkgname-$pkgver
+    CC=cc CXX=c++ \
+    meson setup build --prefix="$DEVKITPRO/tools"
+}
+
+build() {
+    cd $srcdir/$pkgname-$pkgver/build
+    ninja
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver/build
+    DESTDIR=$pkgdir ninja install
+}
+
+sha256sums=('81320b7824c2e7ed864952589a4b98f96541ad7a97605f46c4aa30981eb8dde3')
