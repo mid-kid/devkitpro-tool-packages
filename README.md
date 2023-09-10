@@ -62,3 +62,15 @@ Once that's done, the compiler will work as-is. However, most programs will requ
 - `switch-dev`
 
 If a package dependency is missing, makepkg will (usually) tell you about it, and you'll have to look for the appropriate PKGBUILD in the repository.
+
+Updates
+-------
+
+I don't have the time or energy to continually maintain this repository. As such, it'll generally only be updated when I need it. Feel free to contribute.
+
+While I'm generally confident that the current state of this repository will remain working for a decent amount of time, at some point it the future it might break.
+
+To check if updates are available for packages in the repository, use the following script:
+```
+./repo_check.sh
+```
