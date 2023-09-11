@@ -2,6 +2,7 @@ pkgname=pacman
 pkgver=6.0.2
 pkgrel=1
 arch=(any)
+backup=("${DEVKITPRO#/}"/pacman/etc/{pacman,makepkg}.conf)
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz
     rootless.patch)
 
