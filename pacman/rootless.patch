@@ -33,7 +33,7 @@
 -	fi
 +	fakeroot() {
 +		shift
-+		FAKEROOTKEY=x "$@"
++		PACMAN="$PACMAN_PATH" FAKEROOTKEY=x "$@"
 +	}
  }
 --- pacman-6.0.2.orig/scripts/libmakepkg/executable/sudo.sh.in
