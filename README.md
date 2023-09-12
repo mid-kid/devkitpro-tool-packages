@@ -46,9 +46,9 @@ dkp-makepkg -ci
 ```
 
 You'll probably first want to build a compiler toolchain. These take the longest of any package to build, so don't panic. Depending on your platform, you'll want to pick one of:
-- `tool-packages/devkitARM`
-- `tool-packages/devkitPPC`
-- `tool-packages/devkitA64`
+- `tool-packages/devkitARM` (gba gp32 gp2x nds 3ds)
+- `tool-packages/devkitPPC` (gc wii wiiu)
+- `tool-packages/devkitA64` (switch)
 
 Clone the [pacman-packages](https://github.com/mid-kid/devkitpro-pacman-packages/) repository, and install the rules/crtls for your toolchain:
 - `pacman-packages/devkitarm/devkitarm-rules`
@@ -56,7 +56,17 @@ Clone the [pacman-packages](https://github.com/mid-kid/devkitpro-pacman-packages
 - `pacman-packages/devkitppc/devkitppc-rules`
 - `pacman-packages/devkita64/devkita64-rules`
 
-Once that's done, the compiler will work as-is. However, most programs will require some libraries to compile properly. If you're not familiar with the library ecosystem of the platform you're building for, you'll probably want to run `grep -rw <group>` in the `pacman-packages` repository to find out about the common libraries for your platform. `<group>` can be any of:
+Once that's done, the compiler will work as-is. However, most programs and portlibs (ported libraries in `pacman-packages`) will require some libraries to compile properly, depending on your platform. Here's some examples:
+- `pacman-packages/libgba` (gba)
+- `pacman-packages/libmirko` (gp32)
+- `pacman-packages/gp2x/liborcus` (gp2x)
+- `pacman-packages/libnds` (nds, required for portlibs), as well as `pacman-packages/default-arm7` for building any ROM.
+- `pacman-packages/libctru` (3ds, required for portlibs)
+- `pacman-packages/libogc` (gc/wii, required for portlibs)
+- `wut-packages/wut` (wiiu, required for portlibs)
+- `pacman-packages/libnx` (switch, required for portlibs)
+
+If you're not familiar with the library ecosystem of the platform you're building for, you'll probably want to run `grep -rw <group>` in the `pacman-packages` repository to find out about the common libraries for your platform. `<group>` can be any of:
 - `gba-dev`
 - `gp32-dev`
 - `nds-dev`
