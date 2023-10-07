@@ -2,10 +2,12 @@ pkgname=gba-tools
 pkgver=1.2.0
 pkgrel=1
 arch=(any)
-source=(https://github.com/devkitPro/gba-tools/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2)
+source=(https://github.com/devkitPro/gba-tools/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2
+    gcc13.patch)
 
 prepare() {
     cd $srcdir/$pkgname-$pkgver
+    patch -p1 -i $srcdir/gcc13.patch
     ./configure --prefix="$DEVKITPRO/tools"
 }
 
@@ -19,4 +21,5 @@ package() {
     make DESTDIR=$pkgdir install
 }
 
-sha256sums=('516e5037e48b3dbaaa41291f83146d039b35b04ccc6887a7e92858ff59ea6daa')
+sha256sums=('516e5037e48b3dbaaa41291f83146d039b35b04ccc6887a7e92858ff59ea6daa'
+            '0aecb9565ce10fa5a9ea253baf3ebfd916a99edd31ec3df36b41076afee87d87')
