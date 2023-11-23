@@ -1,5 +1,5 @@
 pkgname=3dstools
-pkgver=1.3.0
+pkgver=1.3.1
 pkgrel=1
 arch=(any)
 source=($pkgname-$pkgver.tar.gz::https://github.com/devkitPro/3dstools/archive/refs/tags/v$pkgver.tar.gz)
@@ -20,4 +20,4 @@ package() {
     make DESTDIR=$pkgdir install
 }
 
-sha256sums=('b2a9bc8ca37f868ef86ae3082f568ce804607f8bb986b797478cb71732ed8b2c')
+sha256sums=('a1eab5138ad985f6fb3e999706a51300c363399bb1a83ec5a052958ed74d8f45')
